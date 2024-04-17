@@ -58,13 +58,12 @@ def newAnalyzer():
                 }
 
     analyzer["crimes"] = lt.newList("SINGLE_LINKED", compareIds)
-    analyzer["dateIndex"] = om.newMap(omaptype="RBT",
+    analyzer["dateIndex"] = om.newMap(omaptype="BST",
                                       cmpfunction=compareDates)
     # TODO lab 9, crear el indice ordenado por areas reportadas
-    analyzer["areaIndex"]=om.newMap(omaptype="BST",
-                                    cmpfunction=compareAreas)
+    analyzer["areaIndex"] = om.newMap(omaptype="BST",
+                                      cmpfunction=compareAreas)
     return analyzer
-
 
 # Funciones para agregar informacion al catalogo
 
