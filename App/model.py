@@ -61,7 +61,7 @@ def newAnalyzer():
     analyzer["dateIndex"] = om.newMap(omaptype="BST",
                                       cmpfunction=compareDates)
     # TODO lab 9, crear el indice ordenado por areas reportadas
-    analyzer["areaIndex"] = om.newMap(omaptype="BST",
+    analyzer["areaIndex"] = om.newMap(omaptype="RBT",
                                       cmpfunction=compareAreas)
     return analyzer
 
@@ -94,6 +94,21 @@ def updateAreaIndex(map, crime):
     # revisar si el area ya esta en el indice
 
     # si el area ya esta en el indice, adicionar el crimen a la lista
+    
+    area = crime["REPORTING_AREA"]
+    try:
+        crimeArea = int(area)
+    except:
+        crimeArea=0
+        
+    entry = om.get(map, crimeArea)
+    if entry is None:
+        areaEntry = newAreaEntry(crime)
+        om.put(map, crimeArea, areaEntry)
+    else:
+        areaEntry = me.getValue(entry)
+        lt.addLast(areaEntry,crime)
+
     return map
 
 
@@ -101,28 +116,13 @@ def newAreaEntry(crime):
     """
     Crea una entrada para el indice de areas reportadas
     """
-    # TODO lab 9, crear una entrada para el indice de areas reportadas
-    entry = {"lstcrimes": None, }
+  
+    entry= lt.newList("SINGLE_LINKED", compareAreas)
+    lt.addLast(entry, crime)
     return entry
 
 
-def addAreaIndex(area_entry, crime):
-    """
-    Adiciona un crimen a la lista de crimenes de un area
-    """
-    # TODO lab 9, adicionar crimen a la lista de crimenes de un area
-    lst = area_entry["lstarea"]
-    lt.addLast(lst, crime)
-    areaIndex = area_entry["areaIndex"]
-    areaentry = m.get(areaIndex, crime["DISTRICREPORTING_AREAT"])
-    if (areaentry is None):
-        entry = newOffenseEntry(crime["DISTRICREPORTING_AREAT"], crime)
-        lt.addLast(entry["lstarea"], crime)
-        m.put(areaIndex, crime["DISTRICREPORTING_AREAT"], entry)
-    else:
-        entry = me.getValue(areaentry)
-        lt.addLast(entry["lstoffenses"], crime)
-    return area_entry
+
 
 
 def updateDateIndex(map, crime):
@@ -271,7 +271,11 @@ def getCrimesByRangeArea(analyzer, initialArea, finalArea):
     """
     # TODO lab 9, completar la consulta de crimenes por rango de areas
     totalcrimes = 0
-    return totalcrimes
+    lst = om.values(analyzer["areaIndex"], initialArea, finalArea)
+    totalcrimes = 0
+    for lstaarea in lt.iterator(lst):
+        totalcrimes += lt.size(lstaarea)
+    return totalcrimes   
 
 
 def getCrimesByRange(analyzer, initialDate, finalDate):
@@ -332,6 +336,8 @@ def compareAreas(area1, area2):
     """
     Compara dos areas
     """
+
+        
     # area = "REPORTING_AREA"
     if (area1 == area2):
         return 0
