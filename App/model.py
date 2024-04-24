@@ -94,21 +94,16 @@ def updateAreaIndex(map, crime):
     # revisar si el area ya esta en el indice
 
     # si el area ya esta en el indice, adicionar el crimen a la lista
-    
-    area = crime["REPORTING_AREA"]
-    try:
-        crimeArea = int(area)
-    except:
-        crimeArea=0
-        
-    entry = om.get(map, crimeArea)
+    reportingarea = crime["REPORTING_AREA"]
+    if (reportingarea == '') or (reportingarea == ' ') or (reportingarea == None):
+        reportingarea = '9999'
+    entry = om.get(map, reportingarea)
     if entry is None:
-        areaEntry = newAreaEntry(crime)
-        om.put(map, crimeArea, areaEntry)
+        datentry = newAreaEntry(crime)
+        om.put(map, reportingarea, datentry)
     else:
-        areaEntry = me.getValue(entry)
-        lt.addLast(areaEntry,crime)
-
+        datentry = me.getValue(entry)
+    addAreaIndex(datentry, crime)
     return map
 
 
@@ -116,13 +111,21 @@ def newAreaEntry(crime):
     """
     Crea una entrada para el indice de areas reportadas
     """
-  
-    entry= lt.newList("SINGLE_LINKED", compareAreas)
-    lt.addLast(entry, crime)
+    # TODO lab 9, crear una entrada para el indice de areas reportadas
+    entry = {"lstcrimes": None, }
+    entry["lstcrimes"] = lt.newList("SINGLE_LINKED", compareDates)
+    lt.addLast(entry["lstcrimes"], crime)
     return entry
 
 
-
+def addAreaIndex(area_entry, crime):
+    """
+    Adiciona un crimen a la lista de crimenes de un area
+    """
+    # TODO lab 9, adicionar crimen a la lista de crimenes de un area
+    lst = area_entry["lstcrimes"]
+    lt.addLast(lst, crime)
+    return area_entry
 
 
 def updateDateIndex(map, crime):
@@ -269,13 +272,12 @@ def getCrimesByRangeArea(analyzer, initialArea, finalArea):
     """
     Retorna el numero de crimenes en un rango de areas
     """
+    lst = om.values(analyzer['areaIndex'], initialArea, finalArea)
     # TODO lab 9, completar la consulta de crimenes por rango de areas
     totalcrimes = 0
-    lst = om.values(analyzer["areaIndex"], initialArea, finalArea)
-    totalcrimes = 0
-    for lstaarea in lt.iterator(lst):
-        totalcrimes += lt.size(lstaarea)
-    return totalcrimes   
+    for lstdate in lt.iterator(lst):
+        totalcrimes += lt.size(lstdate["lstcrimes"])
+    return totalcrimes
 
 
 def getCrimesByRange(analyzer, initialDate, finalDate):
