@@ -126,7 +126,7 @@ def minKeyAreas(analyzer):
     La menor llave del arbol por areas
     """
     # TODO lab 9, completar el llamado de minKeyAreas()
-    return model.minKey(analyzer)
+    return model.minKeyAreas(analyzer)
 
 
 def maxKeyAreas(analyzer):
@@ -166,7 +166,7 @@ def getCrimesByRangeArea(analyzer, initialArea, finalArea):
     # recuerde castear los parametros a int
     initialArea = int(initialArea)
     finalArea = int(finalArea)
-    return model.getCrimesByRange(analyzer, initialArea,
+    return model.getCrimesByRangeArea(analyzer, initialArea,
                                   finalArea)    
 
 

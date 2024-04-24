@@ -79,7 +79,7 @@ while True:
         print("Menor Llave: " + str(controller.minKey(cont)))
         print("Mayor Llave: " + str(controller.maxKey(cont)))
         # TODO lab 9, imprimir las propiedades del indice de areas
-        print("Altura del árbol de áreas: "+str(controller.indexSizeAreas(cont)))
+        print("Altura del árbol de áreas: "+str(controller.indexHeightAreas(cont)))
         print("Elementos del árbol de áreas: "+str(controller.indexSizeAreas(cont)))
         print("Menor llave: "+str(controller.minKeyAreas(cont)))
         print("Mayor llave: "+str(controller.maxKeyAreas(cont)))
