@@ -129,6 +129,7 @@ def minKeyAreas(analyzer):
     return model.minKeyAreas(analyzer)
 
 
+
 def maxKeyAreas(analyzer):
     """
     La mayor llave del arbol por areas
@@ -143,8 +144,14 @@ def getCrimesByRange(analyzer, initialDate, finalDate):
     """
     initialDate = datetime.datetime.strptime(initialDate, "%Y-%m-%d")
     finalDate = datetime.datetime.strptime(finalDate, "%Y-%m-%d")
-    return model.getCrimesByRange(analyzer, initialDate.date(),
+    inicio=getTime()
+    
+    a= model.getCrimesByRange(analyzer, initialDate.date(),
                                   finalDate.date())
+    fin=getTime()
+    
+    return a,deltaTime(fin,inicio)
+    
 
 
 def getCrimesByRangeCode(analyzer, initialDate,
@@ -166,8 +173,11 @@ def getCrimesByRangeArea(analyzer, initialArea, finalArea):
     # recuerde castear los parametros a int
     initialArea = int(initialArea)
     finalArea = int(finalArea)
-    return model.getCrimesByRangeArea(analyzer, initialArea,
-                                  finalArea)    
+    inicio=getTime()
+    b= model.getCrimesByRangeArea(analyzer, initialArea,
+                                  finalArea)   
+    final=getTime()
+    return b, deltaTime(final,inicio) 
 
 
 # Funciones para medir tiempos de ejecucion
